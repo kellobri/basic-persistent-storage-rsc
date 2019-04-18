@@ -1,0 +1,12 @@
+name: flexdashboard-consumer
+title: Flexdashboard-Consumer
+username: kelly
+account: kelly
+server: colorado.rstudio.com
+hostUrl: https://colorado.rstudio.com/rsc/__api__
+appId: 2356
+bundleId: 25615
+url: https://colorado.rstudio.com:443/rsc/content/2356/
+when: 1555620933.4328
+asMultiple: FALSE
+asStatic: FALSE

@@ -1,0 +1,46 @@
+---
+title: "Read Persistent Data on RStudio Connect"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+library(gt)
+library(dplyr)
+
+per_data <- read.csv("/tmp_shared/write-data-example.csv")
+
+per_data %>%
+  sample_n(10) %>%
+  gt() %>%
+  tab_header(
+    title = "Current Data Sample"
+  )
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+
+```
+
+### Chart C
+
+```{r}
+
+```
+

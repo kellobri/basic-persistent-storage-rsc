@@ -1,0 +1,75 @@
+---
+title: "Persistent Shared Storage Example"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(reticulate)
+```
+
+A common use case for [Schduling on RStudio Connect](https://docs.rstudio.com/connect/user/r-markdown-schedule.html), is to use that feature as part of an R-based process to automate scheduled data updates. This example report outputs a CSV file that can be used/consumed by other assets hosted on RStudio Connect.
+
+## R Markdown Writing to Persistent Storage on RStudio Connect
+
+- Reference: [Persistent Storage on RStudio Connect](https://support.rstudio.com/hc/en-us/articles/360007981134-Persistent-Storage-on-RStudio-Connect)
+
+### Create Data
+
+```{r}
+df <- data.frame(a=rnorm(50), b=rnorm(50), c=rnorm(50), d=rnorm(50), e=rnorm(50))
+```
+
+Every time this report is executed, it creates a new random data frame. _Creating dummy data is not representative of a typical ETL process._ You'll likely want to replace this section with code that pulls data from a database or API.
+
+- Best practices for working with databases can be found at [db.rstudio.com](https://db.rstudio.com/)
+- The `httr` package is a [good place to start](https://cran.r-project.org/web/packages/httr/vignettes/quickstart.html) when working with REST APIs and the http protocol
+
+### Preview Data (optional)
+
+```{r message=FALSE, warning=FALSE}
+library(gt)
+library(dplyr)
+
+df %>%
+  sample_n(6) %>%
+  gt() %>%
+  tab_header(
+    title = "Current Data Sample"
+  )
+```
+
+### Write Data 
+
+Absolute references must be concerned about the sandboxed processes on RStudio Connect. RStudio Connect protects certain areas on the file system from access by the processes that it executes. As a result, when absolute references are in use, it is best to define a top-level directory (like /tmp_shared) that is uniquely named and houses persistent data.
+
+Check for old data and remove from tmp_shared:
+
+```{python echo = TRUE}
+import os
+
+if os.path.exists("/tmp_shared/write-data-example.csv"):
+  os.remove("/tmp_shared/write-data-example.csv")
+
+```
+
+Write the new data file:
+
+```{r}
+write.csv(df, "/tmp_shared/write-data-example.csv", row.names=FALSE)
+```
+
+Log a success:
+
+```{r}
+system("date | cat - /tmp_shared/write-ex-log.txt > temp && mv temp /tmp_shared/write-ex-log.txt")
+```
+
+Test - Read the data back in (to a new variable):
+
+```{r}
+per_data <- read.csv("/tmp_shared/write-data-example.csv")
+summary(per_data)
+```
+
+

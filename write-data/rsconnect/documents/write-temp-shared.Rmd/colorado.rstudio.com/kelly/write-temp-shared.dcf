@@ -1,0 +1,12 @@
+name: write-temp-shared
+title: write-temp-shared
+username: kelly
+account: kelly
+server: colorado.rstudio.com
+hostUrl: https://colorado.rstudio.com/rsc/__api__
+appId: 2355
+bundleId: 25616
+url: https://colorado.rstudio.com:443/rsc/content/2355/
+when: 1555621128.59224
+asMultiple: FALSE
+asStatic: FALSE
